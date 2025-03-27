@@ -5,7 +5,6 @@ def main():
     import json
     import os
 
-    st.set_page_config(page_title="アンケート・テスト", layout="centered")
     st.title("アンケート・テスト")
 
     user_id = st.session_state.get("user_id", "")

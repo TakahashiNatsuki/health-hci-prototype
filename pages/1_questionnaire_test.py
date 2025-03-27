@@ -5,6 +5,8 @@ def main():
     import json
     import os
 
+    # st.set_page_config() ← ❌ 絶対に書かない（main.py 側だけにする）
+
     st.title("アンケート・テスト")
 
     user_id = st.session_state.get("user_id", "")
@@ -81,16 +83,9 @@ def main():
             }
 
             df = pd.DataFrame([result])
-            csv_filename = f"userdata_{user_id}_qa.csv"
-            json_filename = f"userdata_{user_id}_qa.json"
-
-            df.to_csv(csv_filename, index=False, encoding="utf-8-sig")
-            with open(json_filename, "w", encoding="utf-8") as f:
-                json.dump(result, f, ensure_ascii=False, indent=2)
-
             os.makedirs("userdata", exist_ok=True)
-            df.to_csv(os.path.join("userdata", csv_filename), index=False, encoding="utf-8-sig")
-            with open(os.path.join("userdata", json_filename), "w", encoding="utf-8") as f:
+            df.to_csv(f"userdata/userdata_{user_id}_qa.csv", index=False, encoding="utf-8-sig")
+            with open(f"userdata/userdata_{user_id}_qa.json", "w", encoding="utf-8") as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
 
             st.success("回答を保存しました。ありがとうございました！")

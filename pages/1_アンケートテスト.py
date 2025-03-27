@@ -43,7 +43,6 @@ if user_id and bmr:
         bmi_q1 = st.radio("BMIは身長と体重から計算される？", ["はい", "いいえ"])
         bmi_q2 = st.radio("BMIが22だと病気になりにくい？", ["はい", "いいえ"])
 
-    # 🔐 必須設問がすべて埋まっていれば次へ
     if all([q1, q2.strip(), q3.strip(), q4, q5]):
         st.header("🔸 カロリー感覚・応用")
 
@@ -69,10 +68,19 @@ if user_id and bmr:
 
         if st.button("送信して保存"):
             now = datetime.datetime.now().isoformat()
-            result = {
+
+            # 🔸 main.py 側のデータを読み込み
+            base_data = {}
+            try:
+                with open(f"userdata/userdata_{user_id}.json", "r", encoding="utf-8") as f:
+                    base_data = json.load(f)
+            except FileNotFoundError:
+                st.warning("main.py の情報が見つかりません。先に前ページで入力してください。")
+                st.stop()
+
+            # 🔸 アンケートの回答データ
+            survey_data = {
                 "timestamp": now,
-                "user_id": user_id,
-                "bmr": round(bmr, 2),
                 "activity_level": activity_level,
                 "activity_factor": activity_factor,
                 "calculated_need_kcal": need_kcal,
@@ -83,23 +91,25 @@ if user_id and bmr:
                 "bmi_q1": bmi_q1, "bmi_q2": bmi_q2
             }
 
+            # 🔸 統合して保存
+            result = {**base_data, **survey_data}
+
             os.makedirs("userdata", exist_ok=True)
             df = pd.DataFrame([result])
-            df.to_csv(f"userdata/userdata_{user_id}_qa.csv", index=False, encoding="utf-8-sig")
-            with open(f"userdata/userdata_{user_id}_qa.json", "w", encoding="utf-8") as f:
+            df.to_csv(f"userdata/userdata_{user_id}_full.csv", index=False, encoding="utf-8-sig")
+            with open(f"userdata/userdata_{user_id}_full.json", "w", encoding="utf-8") as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
 
-            st.success("回答を保存しました。ありがとうございました！")
+            st.success("全データを保存しました。ありがとうございました！")
 
-            with open(f"userdata/userdata_{user_id}_qa.csv", "rb") as f:
+            with open(f"userdata/userdata_{user_id}_full.csv", "rb") as f:
                 st.download_button(
-                    label="CSVをダウンロード",
+                    label="全データ（CSV）をダウンロード",
                     data=f,
-                    file_name=f"userdata_{user_id}_qa.csv",
+                    file_name=f"userdata_{user_id}_full.csv",
                     mime="text/csv"
                 )
     else:
         st.warning("先に「日常生活・意識について」のすべての質問に答えてください。")
-
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

@@ -62,4 +62,5 @@ if st.button("送信する"):
 # アンケートページへ
 if st.session_state.get("submitted") and st.session_state.get("user_id"):
     st.markdown("### 次に進む")
-    st.page_link("pages/1_アンケート＋テスト.py", label="➡ アンケート・テストに進む", icon="📝")
+    st.page_link("pages/1_questionnaire_test.py", label="➡ アンケート・テストに進む", icon="📝")
+

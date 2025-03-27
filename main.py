@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import json
+import os
 
 st.set_page_config(page_title="健康体型学習 入力フォーム", layout="centered")
 st.title("健康体型学習 入力フォーム")
@@ -16,7 +17,7 @@ sex = st.selectbox(
 height = st.number_input("身長（cm、小数第1位まで。）", min_value=100.0, max_value=250.0, step=0.1, format="%.1f")
 weight = st.number_input("体重（kg、小数第1位まで。）", min_value=30.0, max_value=200.0, step=0.1, format="%.1f")
 
-# ✅ 体脂肪率：空欄可にするため text_input + float変換
+# 空欄OKな体脂肪率入力
 body_fat_str = st.text_input("体脂肪率（%、小数第1位まで。空欄可）")
 try:
     body_fat = float(body_fat_str) if body_fat_str else None
@@ -24,12 +25,12 @@ except ValueError:
     st.error("数値を入力してください。")
     body_fat = None
 
-# ボタン押下で処理
+# 送信処理
 if st.button("送信する"):
     height_m = height / 100
     bmi = weight / (height_m ** 2)
 
-    # ✅ 修正済：基礎代謝の式
+    # 基礎代謝計算
     if sex == "男性（出生時）":
         bmr = (0.0481 * weight + 0.0234 * height - 0.0138 * age - 0.4235) * 1000 / 4.186
     else:
@@ -53,23 +54,24 @@ if st.button("送信する"):
     csv_filename = f"userdata_{user_id}.csv"
     json_filename = f"userdata_{user_id}.json"
 
-    # 保存（CSV & JSON）
+    # ✅ サーバー側保存（Streamlit環境）
     df.to_csv(csv_filename, index=False, encoding='utf-8-sig')
     with open(json_filename, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    st.success("データが作成されました。以下のボタンを押してください。")
-    st.download_button("CSVをダウンロード", data=df.to_csv(index=False).encode("utf-8-sig"), file_name=csv_filename, mime="text/csv")
-    st.download_button("JSONをダウンロード（Unity用）", data=json.dumps(data, ensure_ascii=False, indent=2), file_name=json_filename, mime="application/json")
+    # ✅ ローカル保存（開発者用バックアップ）
+    local_csv_path = os.path.join("userdata", csv_filename)
+    local_json_path = os.path.join("userdata", json_filename)
+    os.makedirs("userdata", exist_ok=True)
+    df.to_csv(local_csv_path, index=False, encoding='utf-8-sig')
+    with open(local_json_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
-    # セッションに保存
+    # セッションに保存＆ページ遷移
     st.session_state["user_id"] = user_id
     st.session_state["bmr"] = round(bmr, 2)
-    st.session_state["submitted"] = True
 
-# 次ページへの案内
-if st.session_state.get("submitted") and st.session_state.get("user_id"):
-    st.markdown("### 次に進む")
-    if st.button("➡ アンケート・テストに進む"):
-        st.success("次のページに進んでください。")
-        st.markdown("👉 サイドバーから『アンケート・テスト』ページを選択してください。")
+    st.success("データが保存されました。アンケートに移動します。")
+
+    # ページ遷移（pages/1_questionnaire_test.py にしてね）
+    st.switch_page("pages/1_questionnaire_test.py")

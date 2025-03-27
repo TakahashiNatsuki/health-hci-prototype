@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 import io
 
-st.title("健康体型学習用プロトタイプ入力フォーム")
+st.title("健康体型学習 入力フォーム")
 
 # 入力欄
 user_id = st.text_input("指定のIDを入力してください。")

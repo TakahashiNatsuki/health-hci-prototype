@@ -25,12 +25,11 @@ except ValueError:
     st.error("数値を入力してください。")
     body_fat = None
 
-# 送信処理
 if st.button("送信する"):
     height_m = height / 100
     bmi = weight / (height_m ** 2)
 
-    # 基礎代謝計算（修正版）
+    # 修正済みの基礎代謝計算式
     if sex == "男性（出生時）":
         bmr = (0.0481 * weight + 0.0234 * height - 0.0138 * age - 0.4235) * 1000 / 4.186
     else:
@@ -54,12 +53,12 @@ if st.button("送信する"):
     csv_filename = f"userdata_{user_id}.csv"
     json_filename = f"userdata_{user_id}.json"
 
-    # ✅ サーバー側保存
+    # サーバー側保存
     df.to_csv(csv_filename, index=False, encoding='utf-8-sig')
     with open(json_filename, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    # ✅ ローカル保存
+    # ローカル保存（バックアップ用）
     local_csv_path = os.path.join("userdata", csv_filename)
     local_json_path = os.path.join("userdata", json_filename)
     os.makedirs("userdata", exist_ok=True)
@@ -67,13 +66,15 @@ if st.button("送信する"):
     with open(local_json_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    # ✅ セッションに保存し、次回描画で遷移フラグを使う
+    # セッションに保存
     st.session_state["user_id"] = user_id
     st.session_state["bmr"] = round(bmr, 2)
     st.session_state["go_to_questionnaire"] = True
+
     st.success("データが保存されました。アンケートに移動します。")
 
-# ✅ 次の描画フレームで遷移を実行
+# 次の描画フレームで遷移（go_to_questionnaire が True の場合）
 if st.session_state.get("go_to_questionnaire", False):
     st.session_state["go_to_questionnaire"] = False
-    st.switch_page("pages/1_questionnaire_test.py")
+    # ここではファイルパスではなく、アンケートページのタイトル（st.title で設定したもの）を指定
+    st.switch_page("アンケート・テスト")

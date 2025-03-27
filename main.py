@@ -27,6 +27,7 @@ if st.button("送信する"):
     height_m = height / 100
     bmi = weight / (height_m ** 2)
 
+    # ✅ 基礎代謝の式を修正（年齢の係数マイナスに）
     if sex == "男性（出生時）":
         bmr = (0.0481 * weight + 0.0234 * height - 0.0138 * age - 0.4235) * 1000 / 4.186
     else:
@@ -69,10 +70,11 @@ if st.button("送信する"):
         mime='text/csv'
     )
 
-    # IDをセッションに保存
+    # セッションに保存して次ページに渡す
     st.session_state["user_id"] = user_id
+    st.session_state["submitted"] = True
 
-# ▶ アンケートに進むボタン
-if "user_id" in st.session_state and st.session_state["user_id"]:
+# ✅ アンケートページへのリンク（送信後のみ表示）
+if st.session_state.get("submitted") and st.session_state.get("user_id"):
     st.markdown("### 次に進む")
     st.page_link("pages/1_アンケート.py", label="➡ アンケートに進む", icon="📝")

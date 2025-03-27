@@ -1,11 +1,13 @@
-import streamlit as st
-import pandas as pd
-import datetime
-import json
-import os
+# ファイルの最上部に追加
+def main():
+    import streamlit as st
+    import pandas as pd
+    import datetime
+    import json
+    import os
 
-st.set_page_config(page_title="アンケート・テスト", layout="centered")
-st.title("アンケート・テスト")  # ✅ ← これが main.py 側の switch_page() と一致する必要あり
+    st.set_page_config(page_title="アンケート・テスト", layout="centered")
+    st.title("アンケート・テスト")
 
 # セッションから取得、なければ手入力
 user_id = st.session_state.get("user_id", "")

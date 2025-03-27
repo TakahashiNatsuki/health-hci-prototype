@@ -1,3 +1,4 @@
+""
 import streamlit as st
 import pandas as pd
 import datetime
@@ -29,25 +30,37 @@ if user_id and bmr:
 
     if not st.session_state["questions_locked"]:
         st.header("日常生活・意識について")
-        st.session_state["q1"] = st.radio("普段から健康に気を使っていますか？", ["はい", "どちらともいえない", "いいえ"], key="q1")
-        st.session_state["q2"] = st.text_input("1日に何食食べますか？", key="q2")
-        st.session_state["q3"] = st.text_input("間食をする頻度は？", key="q3")
-        st.session_state["q4"] = st.radio("栄養バランスを意識して食事を選びますか？", ["はい", "どちらともいえない", "いいえ"], key="q4")
-        st.session_state["q5"] = st.radio("ダイエット経験はありますか？", ["はい", "どちらともいえない", "いいえ"], key="q5")
+        q1 = st.radio("普段から健康に気を使っていますか？", ["はい", "どちらともいえない", "いいえ"], key="q1")
+        q2 = st.text_input("1日に何食食べますか？", key="q2")
+        q3 = st.text_input("間食をする頻度は？", key="q3")
+        q4 = st.radio("栄養バランスを意識して食事を選びますか？", ["はい", "どちらともいえない", "いいえ"], key="q4")
+        q5 = st.radio("ダイエット経験はありますか？", ["はい", "どちらともいえない", "いいえ"], key="q5")
 
         st.header("健康・体型知識について")
-        st.session_state["know_bmr"] = st.radio("「基礎代謝」という言葉を知っていますか？", ["はい", "いいえ"], key="know_bmr")
-        st.session_state["know_bmi"] = st.radio("「BMI」という言葉を知っていますか？", ["はい", "いいえ"], key="know_bmi")
+        know_bmr = st.radio("「基礎代謝」という言葉を知っていますか？", ["はい", "いいえ"], key="know_bmr")
+        know_bmi = st.radio("「BMI」という言葉を知っていますか？", ["はい", "いいえ"], key="know_bmi")
 
-        if st.session_state["know_bmr"] == "はい":
-            st.session_state["bmr_q1"] = st.radio("基礎代謝が高いほど痩せやすい？", ["はい", "いいえ"], key="bmr_q1")
-            st.session_state["bmr_q2"] = st.radio("基礎代謝は年齢とともに下がる？", ["はい", "いいえ"], key="bmr_q2")
+        bmr_q1 = bmr_q2 = bmi_q1 = bmi_q2 = ""
+        if know_bmr == "はい":
+            bmr_q1 = st.radio("基礎代謝が高いほど痩せやすい？", ["はい", "いいえ"], key="bmr_q1")
+            bmr_q2 = st.radio("基礎代謝は年齢とともに下がる？", ["はい", "いいえ"], key="bmr_q2")
 
-        if st.session_state["know_bmi"] == "はい":
-            st.session_state["bmi_q1"] = st.radio("BMIは身長と体重から計算される？", ["はい", "いいえ"], key="bmi_q1")
-            st.session_state["bmi_q2"] = st.radio("BMIが22だと病気になりにくい？", ["はい", "いいえ"], key="bmi_q2")
+        if know_bmi == "はい":
+            bmi_q1 = st.radio("BMIは身長と体重から計算される？", ["はい", "いいえ"], key="bmi_q1")
+            bmi_q2 = st.radio("BMIが22だと病気になりにくい？", ["はい", "いいえ"], key="bmi_q2")
 
         if st.button("この回答内容で確定して次に進む"):
+            st.session_state["q1"] = q1
+            st.session_state["q2"] = q2
+            st.session_state["q3"] = q3
+            st.session_state["q4"] = q4
+            st.session_state["q5"] = q5
+            st.session_state["know_bmr"] = know_bmr
+            st.session_state["know_bmi"] = know_bmi
+            st.session_state["bmr_q1"] = bmr_q1
+            st.session_state["bmr_q2"] = bmr_q2
+            st.session_state["bmi_q1"] = bmi_q1
+            st.session_state["bmi_q2"] = bmi_q2
             st.session_state["questions_locked"] = True
             st.rerun()
 

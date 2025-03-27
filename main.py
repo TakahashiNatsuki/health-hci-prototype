@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import json
 import os
+import importlib
 
 # ✅ 追加：switch_page をインポート
 from streamlit_extras.switch_page_button import switch_page
@@ -76,9 +77,8 @@ if st.button("送信する"):
 
     st.success("データが保存されました。アンケートに移動します。")
 
-# ✅ ページ遷移処理（switch_page は使わない！）
+# ページ遷移処理（switch_page は使わず、importlib で読み込む）
 if st.session_state.get("go_to_questionnaire", False):
     st.session_state["go_to_questionnaire"] = False
-    import pages.1_questionnaire_test as questionnaire
+    questionnaire = importlib.import_module("pages.1_questionnaire_test")
     questionnaire.main()
-

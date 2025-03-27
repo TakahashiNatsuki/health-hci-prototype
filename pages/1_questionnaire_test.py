@@ -5,7 +5,7 @@ import json
 import os
 
 st.set_page_config(page_title="アンケート・テスト", layout="centered")
-st.title("アンケート＋知識テスト")
+st.title("アンケート・テスト")  # ✅ ← これが main.py 側の switch_page() と一致する必要あり
 
 # セッションから取得、なければ手入力
 user_id = st.session_state.get("user_id", "")
@@ -57,7 +57,7 @@ if user_id and bmr:
         ]
     )
 
-    # 活動係数の設定
+    # 活動係数
     if "低い" in activity_level:
         activity_factor = 1.5
     elif "ふつう" in activity_level:
@@ -87,12 +87,12 @@ if user_id and bmr:
         csv_filename = f"userdata_{user_id}_qa.csv"
         json_filename = f"userdata_{user_id}_qa.json"
 
-        # 保存
+        # 保存（Cloud環境）
         df.to_csv(csv_filename, index=False, encoding="utf-8-sig")
         with open(json_filename, "w", encoding="utf-8") as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
 
-        # ローカルバックアップ
+        # ローカル保存（backup）
         os.makedirs("userdata", exist_ok=True)
         df.to_csv(os.path.join("userdata", csv_filename), index=False, encoding="utf-8-sig")
         with open(os.path.join("userdata", json_filename), "w", encoding="utf-8") as f:

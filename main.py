@@ -3,10 +3,6 @@ import pandas as pd
 import datetime
 import json
 import os
-import importlib
-
-# ✅ 追加：switch_page をインポート
-from streamlit_extras.switch_page_button import switch_page
 
 st.set_page_config(page_title="健康体型学習 入力フォーム", layout="centered")
 st.title("健康体型学習 入力フォーム")
@@ -21,7 +17,6 @@ sex = st.selectbox(
 height = st.number_input("身長（cm、小数第1位まで。）", min_value=100.0, max_value=250.0, step=0.1, format="%.1f")
 weight = st.number_input("体重（kg、小数第1位まで。）", min_value=30.0, max_value=200.0, step=0.1, format="%.1f")
 
-# 空欄OKな体脂肪率入力
 body_fat_str = st.text_input("体脂肪率（%、小数第1位まで。空欄可）")
 try:
     body_fat = float(body_fat_str) if body_fat_str else None
@@ -33,7 +28,6 @@ if st.button("送信する"):
     height_m = height / 100
     bmi = weight / (height_m ** 2)
 
-    # 修正済みの基礎代謝計算式
     if sex == "男性（出生時）":
         bmr = (0.0481 * weight + 0.0234 * height - 0.0138 * age - 0.4235) * 1000 / 4.186
     else:
@@ -54,31 +48,13 @@ if st.button("送信する"):
     }
 
     df = pd.DataFrame([data])
-    csv_filename = f"userdata_{user_id}.csv"
-    json_filename = f"userdata_{user_id}.json"
-
-    # サーバー側保存
-    df.to_csv(csv_filename, index=False, encoding='utf-8-sig')
-    with open(json_filename, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-    # ローカル保存（バックアップ用）
-    local_csv_path = os.path.join("userdata", csv_filename)
-    local_json_path = os.path.join("userdata", json_filename)
     os.makedirs("userdata", exist_ok=True)
-    df.to_csv(local_csv_path, index=False, encoding='utf-8-sig')
-    with open(local_json_path, "w", encoding="utf-8") as f:
+    df.to_csv(f"userdata/userdata_{user_id}.csv", index=False, encoding='utf-8-sig')
+    with open(f"userdata/userdata_{user_id}.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    # セッションに保存
     st.session_state["user_id"] = user_id
     st.session_state["bmr"] = round(bmr, 2)
-    st.session_state["go_to_questionnaire"] = True
 
-    st.success("データが保存されました。アンケートに移動します。")
-
-# ページ遷移処理（switch_page は使わず、importlib で読み込む）
-if st.session_state.get("go_to_questionnaire", False):
-    st.session_state["go_to_questionnaire"] = False
-    questionnaire = importlib.import_module("pages.1_questionnaire_test")
-    questionnaire.main()
+    st.success("データが保存されました。")
+    st.info("画面左のサイドバーから「アンケート・テスト」ページに移動してください。")

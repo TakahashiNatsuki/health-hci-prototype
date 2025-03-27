@@ -76,5 +76,4 @@ if st.button("送信する"):
 # 次の描画フレームで遷移（go_to_questionnaire が True の場合）
 if st.session_state.get("go_to_questionnaire", False):
     st.session_state["go_to_questionnaire"] = False
-    # ここではファイルパスではなく、アンケートページのタイトル（st.title で設定したもの）を指定
-    st.switch_page("アンケート・テスト")
+    st.switch_page("pages/1_questionnaire_test.py")

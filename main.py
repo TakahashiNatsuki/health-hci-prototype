@@ -4,6 +4,9 @@ import datetime
 import json
 import os
 
+# ✅ 追加：switch_page をインポート
+from streamlit_extras.switch_page_button import switch_page
+
 st.set_page_config(page_title="健康体型学習 入力フォーム", layout="centered")
 st.title("健康体型学習 入力フォーム")
 
@@ -73,7 +76,7 @@ if st.button("送信する"):
 
     st.success("データが保存されました。アンケートに移動します。")
 
-# 次の描画フレームで遷移（go_to_questionnaire が True の場合）
+# ✅ ページ遷移処理（switch_page を使用）
 if st.session_state.get("go_to_questionnaire", False):
     st.session_state["go_to_questionnaire"] = False
-    st.switch_page("pages/1_questionnaire_test.py")
+    switch_page("1_questionnaire_test")  # .py や "pages/" は不要

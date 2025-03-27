@@ -69,4 +69,10 @@ if st.button("送信する"):
         mime='text/csv'
     )
 
-    st.markdown("➡️ 入力が完了したら、画面左上の **「アンケート」ページ** に進んでください。")
+    # IDをセッションに保存
+    st.session_state["user_id"] = user_id
+
+# ▶ アンケートに進むボタン
+if "user_id" in st.session_state and st.session_state["user_id"]:
+    st.markdown("### 次に進む")
+    st.page_link("pages/1_アンケート.py", label="➡ アンケートに進む", icon="📝")

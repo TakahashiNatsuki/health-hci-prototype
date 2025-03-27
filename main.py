@@ -59,8 +59,10 @@ if st.button("送信する"):
     st.session_state["user_id"] = user_id
     st.session_state["submitted"] = True
 
-# アンケートページへ
 if st.session_state.get("submitted") and st.session_state.get("user_id"):
     st.markdown("### 次に進む")
-    st.page_link("pages/1_questionnaire_test.py", label="➡ アンケート・テストに進む", icon="📝")
+    if st.button("➡ アンケート・テストに進む"):
+        st.success("次のページに進んでください。")
+        st.markdown("👉 サイドバーから『アンケート・テスト』ページを選択してください。")
+
 

@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 import io
 
-st.title("健康体型知識勉強用プロトタイプ　入力フォーム")
+st.title("健康体型学習用プロトタイプ入力フォーム")
 
 # 入力欄
 user_id = st.text_input("指定のIDを入力してください。")
@@ -19,7 +19,7 @@ height = st.number_input("身長（cm、小数第1位まで。）", min_value=10
 
 weight = st.number_input("体重（kg、小数第1位まで。）", min_value=30.0, max_value=200.0, step=0.1, format="%.1f")
 
-body_fat = st.number_input("体脂肪率（%）（わからない場合は空欄にしてください。）", min_value=0.0, max_value=60.0, step=0.1, format="%.1f")
+body_fat = st.number_input("体脂肪率（%、小数第1位まで。）（わからない場合は空欄にしてください。）", min_value=0.0, max_value=60.0, step=0.1, format="%.1f")
 
 activity = st.selectbox(
     "あなたの日常での運動レベルを選んでください",

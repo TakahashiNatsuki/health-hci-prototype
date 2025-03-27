@@ -28,9 +28,9 @@ if st.button("送信する"):
     bmi = weight / (height_m ** 2)
 
     if sex == "男性（出生時）":
-        bmr = (0.0481 * weight + 0.0234 * height + 0.0138 * age - 0.4235) * 1000 / 4.186
+        bmr = (0.0481 * weight + 0.0234 * height - 0.0138 * age - 0.4235) * 1000 / 4.186
     else:
-        bmr = (0.0481 * weight + 0.0234 * height + 0.0138 * age - 0.9708) * 1000 / 4.186
+        bmr = (0.0481 * weight + 0.0234 * height - 0.0138 * age - 0.9708) * 1000 / 4.186
 
     factor = 1.5 if "低い" in activity else 1.75 if "ふつう" in activity else 2.0
     need_kcal = bmr * factor

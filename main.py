@@ -76,7 +76,9 @@ if st.button("送信する"):
 
     st.success("データが保存されました。アンケートに移動します。")
 
-# ✅ ページ遷移処理（switch_page を使用）
+# ✅ ページ遷移処理（switch_page は使わない！）
 if st.session_state.get("go_to_questionnaire", False):
     st.session_state["go_to_questionnaire"] = False
-    switch_page("1_questionnaire_test")  # .py や "pages/" は不要
+    import pages.1_questionnaire_test as questionnaire
+    questionnaire.main()
+

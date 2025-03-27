@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 import io
 
-st.title("健康診断用 入力フォーム")
+st.title("健康体型知識勉強用プロトタイプ　入力フォーム")
 
 # 入力欄
 user_id = st.text_input("指定のIDを入力してください。")
@@ -69,7 +69,7 @@ if st.button("送信する"):
 
     # CSVとして即ダウンロード（Streamとして）
     csv = df.to_csv(index=False)
-    st.success("データが作成されました。以下からCSVを保存してください👇")
+    st.success("データが作成されました。以下のボタンを押してください。")
     st.download_button(
         label="CSVをダウンロード",
         data=csv.encode('utf-8'),

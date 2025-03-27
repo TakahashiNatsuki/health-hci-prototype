@@ -5,8 +5,6 @@ def main():
     import json
     import os
 
-    # st.set_page_config() ← ❌ 絶対に書かない（main.py 側だけにする）
-
     st.title("アンケート・テスト")
 
     user_id = st.session_state.get("user_id", "")

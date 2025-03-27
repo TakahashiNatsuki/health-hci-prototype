@@ -28,16 +28,16 @@ if user_id and bmr:
         st.session_state["questions_locked"] = False
 
     if not st.session_state["questions_locked"]:
-        st.header("\ud83d\udd38 日常生活・意識について")
+        st.header("日常生活・意識について")
         st.session_state["q1"] = st.radio("普段から健康に気を使っていますか？", ["はい", "どちらともいえない", "いいえ"], key="q1")
         st.session_state["q2"] = st.text_input("1日に何食食べますか？", key="q2")
         st.session_state["q3"] = st.text_input("間食をする頻度は？", key="q3")
         st.session_state["q4"] = st.radio("栄養バランスを意識して食事を選びますか？", ["はい", "どちらともいえない", "いいえ"], key="q4")
         st.session_state["q5"] = st.radio("ダイエット経験はありますか？", ["はい", "どちらともいえない", "いいえ"], key="q5")
 
-        st.header("\ud83d\udd38 健康・体型知識について")
-        st.session_state["know_bmr"] = st.radio("\u300c基礎代謝\u300dという言葉を知っていますか？", ["はい", "いいえ"], key="know_bmr")
-        st.session_state["know_bmi"] = st.radio("\u300cBMI\u300dという言葉を知っていますか？", ["はい", "いいえ"], key="know_bmi")
+        st.header("健康・体型知識について")
+        st.session_state["know_bmr"] = st.radio("「基礎代謝」という言葉を知っていますか？", ["はい", "いいえ"], key="know_bmr")
+        st.session_state["know_bmi"] = st.radio("「BMI」という言葉を知っていますか？", ["はい", "いいえ"], key="know_bmi")
 
         if st.session_state["know_bmr"] == "はい":
             st.session_state["bmr_q1"] = st.radio("基礎代謝が高いほど痩せやすい？", ["はい", "いいえ"], key="bmr_q1")
@@ -53,12 +53,12 @@ if user_id and bmr:
 
     else:
         st.success("質問はすでに確定済みです。下のカロリーセクションへ進んでください。")
-        st.markdown("### \ud83d\udd38 回答内容（確認用）")
+        st.markdown("### 回答内容（確認用）")
         for q in ["q1", "q2", "q3", "q4", "q5", "know_bmr", "know_bmi", "bmr_q1", "bmr_q2", "bmi_q1", "bmi_q2"]:
             if q in st.session_state:
                 st.write(f"{q}: {st.session_state[q]}")
 
-        st.header("\ud83d\udd38 カロリー感覚・応用")
+        st.header("カロリー感覚・応用")
         kcal_input = st.text_input("自分に必要な1日のカロリー量は何kcalくらいだと思いますか？（数値で）")
 
         activity_level = st.radio(

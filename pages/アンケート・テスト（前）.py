@@ -105,7 +105,7 @@ if user_id and bmr:
 
             query = urllib.parse.urlencode(result)
             unity_url = f"https://sensational-peony-fbb88b.netlify.app////?{query}"
-            st.markdown("### 続けて教材に進みますか？")
+            st.markdown("### 続いてUnity教材に進んでください。")
             if st.button("Unity教材に進む"):
                 st.markdown(f'<meta http-equiv="refresh" content="0;url={unity_url}">', unsafe_allow_html=True)
 

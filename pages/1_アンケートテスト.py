@@ -104,7 +104,7 @@ if user_id and bmr:
             st.success("回答を保存しました。ありがとうございました！")
 
             query = urllib.parse.urlencode(result)
-            unity_url = f"https://fastidious-narwhal-f42620.netlify.app///?{query}"
+            unity_url = f"https://sensational-peony-fbb88b.netlify.app////?{query}"
             st.markdown("### 続けて教材に進みますか？")
             if st.button("Unity教材に進む"):
                 st.markdown(f'<meta http-equiv="refresh" content="0;url={unity_url}">', unsafe_allow_html=True)

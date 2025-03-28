@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import json
-import os
+import io
 import urllib.parse
 
 st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
@@ -95,31 +95,29 @@ if user_id and bmr:
                 if k in st.session_state:
                     result[k] = st.session_state[k]
 
-            # ✅ 保存先を指定
-            SAVE_DIR = "C:\\Users\\hdari\\DietEducation_Prototype\\UserDataFile"
-            os.makedirs(SAVE_DIR, exist_ok=True)
+            st.success("回答を保存しました。下からダウンロードしてください。")
 
+            # ✅ ダウンロードボタン（CSV）
             df = pd.DataFrame([result])
-            csv_path = os.path.join(SAVE_DIR, f"userdata_{user_id}_qa.csv")
-            json_path = os.path.join(SAVE_DIR, f"userdata_{user_id}_qa.json")
-            df.to_csv(csv_path, index=False, encoding="utf-8-sig")
-            with open(json_path, "w", encoding="utf-8") as f:
-                json.dump(result, f, ensure_ascii=False, indent=2)
+            csv_buffer = io.StringIO()
+            df.to_csv(csv_buffer, index=False, encoding="utf-8-sig")
+            st.download_button(
+                label="📥 CSVでダウンロード",
+                data=csv_buffer.getvalue(),
+                file_name=f"userdata_{user_id}_qa.csv",
+                mime="text/csv"
+            )
 
-            st.success("回答を保存しました。ありがとうございました！")
+            # ✅ ダウンロードボタン（JSON）
+            json_str = json.dumps(result, ensure_ascii=False, indent=2)
+            st.download_button(
+                label="📥 JSONでダウンロード",
+                data=json_str,
+                file_name=f"userdata_{user_id}_qa.json",
+                mime="application/json"
+            )
 
-            # ✅ 保存ファイルの確認表示
-            st.markdown("### ✅ 保存されたファイルの確認（開発用）")
-            st.write("保存先パス：", SAVE_DIR)
-            saved_files = os.listdir(SAVE_DIR)
-            if saved_files:
-                st.write("保存されたファイル一覧：")
-                for file in saved_files:
-                    st.write(f"📄 {file}")
-            else:
-                st.warning("保存されたファイルが見つかりませんでした。")
-
-            # Unity教材へのリンク
+            # ✅ Unity教材へのリンク
             unity_url = "https://67e6eaca425db91a2aa35223--sensational-peony-fbb88b.netlify.app"
             st.markdown("### 続いてUnity教材に進んでください。")
             st.markdown(

@@ -23,7 +23,7 @@ if bmr is None:
         st.error("数値を入力してください")
 
 if user_id and bmr:
-    st.markdown(f"現在のID: `{user_id}`　／　基礎代謝: `{round(bmr, 2)} kcal`")
+    st.markdown(f"現在のID: `{user_id}`")
 
     if "questions_locked" not in st.session_state:
         st.session_state["questions_locked"] = False

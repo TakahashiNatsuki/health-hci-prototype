@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import json
 import os
+import tempfile
 import urllib.parse
 
 st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
@@ -95,8 +96,11 @@ if user_id and bmr:
                 if k in st.session_state:
                     result[k] = st.session_state[k]
 
-            SAVE_DIR = "C:\\Users\\hdari\\DietEducation_Prototype\\UserDataFile"
+            # 保存先を一時ディレクトリに変更
+            import tempfile
+            SAVE_DIR = os.path.join(tempfile.gettempdir(), "userdata")
             os.makedirs(SAVE_DIR, exist_ok=True)
+
             df = pd.DataFrame([result])
             df.to_csv(os.path.join(SAVE_DIR, f"userdata_{user_id}_qa.csv"), index=False, encoding="utf-8-sig")
             with open(os.path.join(SAVE_DIR, f"userdata_{user_id}_qa.json"), "w", encoding="utf-8") as f:
@@ -104,11 +108,13 @@ if user_id and bmr:
 
             st.success("回答を保存しました。ありがとうございました！")
 
-            query = urllib.parse.urlencode(result)
-            unity_url = f"https://67e6eaca425db91a2aa35223--sensational-peony-fbb88b.netlify.app"
+            # UnityのURL（実際のURLに変更してください）
+            unity_url = "https://67e6eaca425db91a2aa35223--sensational-peony-fbb88b.netlify.app"
             st.markdown("### 続いてUnity教材に進んでください。")
-            if st.button("Unity教材に進む"):
-                st.markdown(f'<meta http-equiv="refresh" content="0;url={unity_url}">', unsafe_allow_html=True)
+            st.markdown(
+                f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',
+                unsafe_allow_html=True
+            )
 
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

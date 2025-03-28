@@ -90,7 +90,7 @@ if user_id and bmr:
 
         # クエリ文字列生成（Unity用URL）
         query = urllib.parse.urlencode(result)
-        unity_url = f"https://your-unity-app-url.netlify.app/?{query}"
+        unity_url = f"https://frolicking-bombolone-7ffc9c.netlify.app//?{query}"
 
         st.markdown("### 続けて教材に進みますか？")
         if st.button("Unity教材に進む"):

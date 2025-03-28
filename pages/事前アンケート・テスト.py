@@ -95,16 +95,17 @@ if user_id and bmr:
                 if k in st.session_state:
                     result[k] = st.session_state[k]
 
-            os.makedirs("userdata", exist_ok=True)
+            SAVE_DIR = "/mount/data/userdata"
+            os.makedirs(SAVE_DIR, exist_ok=True)
             df = pd.DataFrame([result])
-            df.to_csv(f"userdata/userdata_{user_id}_qa.csv", index=False, encoding="utf-8-sig")
-            with open(f"userdata/userdata_{user_id}_qa.json", "w", encoding="utf-8") as f:
+            df.to_csv(os.path.join(SAVE_DIR, f"userdata_{user_id}_qa.csv"), index=False, encoding="utf-8-sig")
+            with open(os.path.join(SAVE_DIR, f"userdata_{user_id}_qa.json"), "w", encoding="utf-8") as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
 
             st.success("回答を保存しました。ありがとうございました！")
 
             query = urllib.parse.urlencode(result)
-            unity_url = f"https://sensational-peony-fbb88b.netlify.app/?{query}"
+            unity_url = f"https://67e6eaca425db91a2aa35223--sensational-peony-fbb88b.netlify.app"
             st.markdown("### 続いてUnity教材に進んでください。")
             if st.button("Unity教材に進む"):
                 st.markdown(f'<meta http-equiv="refresh" content="0;url={unity_url}">', unsafe_allow_html=True)

@@ -46,7 +46,7 @@ if st.button("送信する"):
         "bmr": round(bmr, 2)
     }
 
-    SAVE_DIR = "C:\Users\hdari\DietEducation_Prototype\UserDataFile"
+    SAVE_DIR = "C:\\Users\\hdari\\DietEducation_Prototype\\UserDataFile"
     os.makedirs(SAVE_DIR, exist_ok=True)
     df = pd.DataFrame([data])
     df.to_csv(os.path.join(SAVE_DIR, f"userdata_{user_id}.csv"), index=False, encoding='utf-8-sig')

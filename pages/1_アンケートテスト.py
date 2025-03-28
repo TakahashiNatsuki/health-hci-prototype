@@ -5,8 +5,8 @@ import json
 import os
 import urllib.parse
 
-st.set_page_config(page_title="アンケート・テスト", layout="centered")
-st.title("アンケート・テスト")
+st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
+st.title("事前アンケート・テスト")
 
 user_id = st.session_state.get("user_id", "")
 bmr = st.session_state.get("bmr", None)

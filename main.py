@@ -49,8 +49,8 @@ if st.button("送信する"):
 
     df = pd.DataFrame([data])
     os.makedirs("userdata", exist_ok=True)
-    df.to_csv(f"userdata/userdata_{user_id}.csv", index=False, encoding='utf-8-sig')
-    with open(f"userdata/userdata_{user_id}.json", "w", encoding="utf-8") as f:
+    df.to_csv(f"C:\Users\hdari\DietEducation_Prototype\UserDataFile/userdata_{user_id}.csv", index=False, encoding='utf-8-sig')
+    with open(f"C:\Users\hdari\DietEducation_Prototype\UserDataFile/userdata_{user_id}.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
     st.session_state["user_id"] = user_id

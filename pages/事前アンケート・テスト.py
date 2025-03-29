@@ -23,6 +23,8 @@ if bmr is None:
         st.error("数値を入力してください")
 
 if user_id and bmr:
+    st.session_state["user_id"] = user_id
+    st.session_state["bmr"] = bmr
     st.markdown(f"現在のID: `{user_id}`")
 
     if "questions_locked" not in st.session_state:
@@ -105,17 +107,11 @@ if user_id and bmr:
 
             df = pd.DataFrame([result])
             csv_bytes = io.BytesIO()
-            df.to_csv(
-                csv_bytes,
-                index=False,
-                encoding="shift_jis",
-                sep=",",
-                quoting=csv.QUOTE_ALL
-            )
+            df.to_csv(csv_bytes, index=False, encoding="shift_jis", quoting=csv.QUOTE_ALL)
             csv_bytes.seek(0)
 
             st.download_button(
-                label="📥 CSVでダウンロード（文字化け防止済み）",
+                label="📥 CSVでダウンロード",
                 data=csv_bytes,
                 file_name=f"userdata_{user_id}_qa.csv",
                 mime="text/csv"
@@ -129,28 +125,18 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unityに送るための埋め込み用スクリプト
-            escaped_json = json.dumps(result, ensure_ascii=False).replace('"', '\\"')
+            # ✅ Unity側で読み取れるように JSON を JS に埋め込む
+            st.components.v1.html(f"""
+                <script>
+                    window.userData = {json_str};
+                </script>
+            """, height=0)
 
-            unity_url = "https://67e806baf55cc00536f7419f--iridescent-sorbet-c5536c.netlify.app/"
+            # ✅ Unity教材ページへ
+            unity_url = "https://xxx.netlify.app/"  # ← ご自身のNetlify URLに差し替えてください
             st.markdown("### 続いてUnity教材に進んでください。")
             st.markdown(
                 f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',
-                unsafe_allow_html=True
-            )
-
-            st.markdown(
-                f"""
-                <script>
-                window.onload = function() {{
-                    const jsonData = "{escaped_json}";
-                    console.log("Sending to Unity:", jsonData);
-                    setTimeout(function() {{
-                        SendMessage("JSBridge", "ReceiveUserData", jsonData);
-                    }}, 1000);
-                }};
-                </script>
-                """,
                 unsafe_allow_html=True
             )
 

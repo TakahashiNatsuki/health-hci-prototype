@@ -118,7 +118,7 @@ if user_id and bmr:
             )
 
             # ✅ Unity教材へのリンク
-            unity_url = "https://67e6eaca425db91a2aa35223--sensational-peony-fbb88b.netlify.app"
+            unity_url = "https://67e7df3bd1e3641ebd7600c8--thunderous-scone-0059ff.netlify.app/"
             st.markdown("### 続いてUnity教材に進んでください。")
             st.markdown(
                 f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',

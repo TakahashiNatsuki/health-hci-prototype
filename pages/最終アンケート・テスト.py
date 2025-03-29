@@ -2,14 +2,14 @@ import streamlit as st
 import pandas as pd
 import datetime
 import json
-import os
+import io
+import csv
 
 st.set_page_config(page_title="最終アンケート・テスト", layout="centered")
 st.title("最終アンケート・テスト")
 
+# ✅ IDを再入力させず、前ページから自動取得
 user_id = st.session_state.get("user_id", "")
-if not user_id:
-    user_id = st.text_input("IDを入力してください（前のページと同じ）")
 
 if user_id:
     st.markdown(f"現在のID: `{user_id}`")
@@ -33,14 +33,28 @@ if user_id:
             "f5": f5
         }
 
-        SAVE_DIR = "/mount/data/userdata"
-        os.makedirs(SAVE_DIR, exist_ok=True)
+        st.success("ご協力ありがとうございました。下からデータをダウンロードしてください。")
+
+        # CSV（Shift_JIS）
         df = pd.DataFrame([result])
-        df.to_csv(os.path.join(SAVE_DIR, f"userdata_{user_id}_final.csv"), index=False, encoding="utf-8-sig")
-        with open(os.path.join(SAVE_DIR, f"userdata_{user_id}_final.json"), "w", encoding="utf-8") as f:
-            json.dump(result, f, ensure_ascii=False, indent=2)
+        csv_bytes = io.BytesIO()
+        df.to_csv(csv_bytes, index=False, encoding="shift_jis", quoting=csv.QUOTE_ALL)
+        csv_bytes.seek(0)
+        st.download_button(
+            label="📥 CSVでダウンロード（最終アンケート）",
+            data=csv_bytes,
+            file_name=f"userdata_{user_id}_final.csv",
+            mime="text/csv"
+        )
 
-        st.success("ご協力ありがとうございました。アンケートはこれで終了です。")
+        # JSON
+        json_str = json.dumps(result, ensure_ascii=False, indent=2)
+        st.download_button(
+            label="📥 JSONでダウンロード（最終アンケート）",
+            data=json_str,
+            file_name=f"userdata_{user_id}_final.json",
+            mime="application/json"
+        )
+
 else:
-    st.info("IDが不足しています。前のページからの入力が必要です。")
-
+    st.warning("前のページからIDが正しく引き継がれていません。最初のページからやり直してください。")

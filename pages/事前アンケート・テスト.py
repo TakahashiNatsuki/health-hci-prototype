@@ -3,7 +3,6 @@ import pandas as pd
 import datetime
 import json
 import io
-import urllib.parse
 import csv
 
 st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
@@ -100,24 +99,26 @@ if user_id and bmr:
             st.session_state["saved"] = True
             st.rerun()
 
-        # 🔁 保存後の画面：ダウンロードとUnityリンクを表示
         if st.session_state.get("saved", False):
             result = st.session_state["saved_result"]
             st.success("回答を保存しました。下からダウンロードしてください。")
 
             df = pd.DataFrame([result])
-            csv_buffer = io.StringIO()
+
+            # ✅ Shift_JIS用 BytesIO に変換（文字化け対策の決定版）
+            csv_bytes = io.BytesIO()
             df.to_csv(
-                csv_buffer,
+                csv_bytes,
                 index=False,
-                encoding="shift_jis",          # ✅ Shift_JISでエクセルに強い
+                encoding="shift_jis",
                 sep=",",
-                quoting=csv.QUOTE_ALL          # ✅ カンマ・改行の安全対策
+                quoting=csv.QUOTE_ALL
             )
+            csv_bytes.seek(0)
 
             st.download_button(
-                label="📥 CSVでダウンロード（Excel向けShift_JIS）",
-                data=csv_buffer.getvalue(),
+                label="📥 CSVでダウンロード（文字化け防止済み）",
+                data=csv_bytes,
                 file_name=f"userdata_{user_id}_qa.csv",
                 mime="text/csv"
             )

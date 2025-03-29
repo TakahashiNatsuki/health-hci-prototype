@@ -133,7 +133,7 @@ if user_id and bmr:
             """, height=0)
 
             # ✅ Unity教材ページへ
-            unity_url = "https://xxx.netlify.app/"  # ← ご自身のNetlify URLに差し替えてください
+            unity_url = "https://67e80bf30dc82b0b80471bf8--incandescent-croissant-889dbb.netlify.app/"  # ← ご自身のNetlify URLに差し替えてください
             st.markdown("### 続いてUnity教材に進んでください。")
             st.markdown(
                 f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',

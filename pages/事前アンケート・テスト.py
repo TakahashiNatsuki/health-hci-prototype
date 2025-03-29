@@ -4,6 +4,7 @@ import datetime
 import json
 import io
 import urllib.parse
+import csv
 
 st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
 st.title("事前アンケート・テスト")
@@ -95,20 +96,31 @@ if user_id and bmr:
                 if k in st.session_state:
                     result[k] = st.session_state[k]
 
+            st.session_state["saved_result"] = result
+            st.session_state["saved"] = True
+            st.rerun()
+
+        # 🔁 保存後の画面：ダウンロードとUnityリンクを表示
+        if st.session_state.get("saved", False):
+            result = st.session_state["saved_result"]
             st.success("回答を保存しました。下からダウンロードしてください。")
 
-            # ✅ ダウンロードボタン（CSV）
             df = pd.DataFrame([result])
             csv_buffer = io.StringIO()
-            df.to_csv(csv_buffer, index=False, encoding="utf-8-sig")
+            df.to_csv(
+                csv_buffer,
+                index=False,
+                encoding="utf-8-sig",
+                sep=",",
+                quoting=csv.QUOTE_ALL
+            )
             st.download_button(
-                label="📥 CSVでダウンロード",
+                label="📥 CSVでダウンロード（Excel対応）",
                 data=csv_buffer.getvalue(),
                 file_name=f"userdata_{user_id}_qa.csv",
                 mime="text/csv"
             )
 
-            # ✅ ダウンロードボタン（JSON）
             json_str = json.dumps(result, ensure_ascii=False, indent=2)
             st.download_button(
                 label="📥 JSONでダウンロード",
@@ -117,7 +129,6 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity教材へのリンク
             unity_url = "https://67e7df3bd1e3641ebd7600c8--thunderous-scone-0059ff.netlify.app/"
             st.markdown("### 続いてUnity教材に進んでください。")
             st.markdown(

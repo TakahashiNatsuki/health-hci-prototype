@@ -110,12 +110,13 @@ if user_id and bmr:
             df.to_csv(
                 csv_buffer,
                 index=False,
-                encoding="utf-8-sig",
+                encoding="shift_jis",          # ✅ Shift_JISでエクセルに強い
                 sep=",",
-                quoting=csv.QUOTE_ALL
+                quoting=csv.QUOTE_ALL          # ✅ カンマ・改行の安全対策
             )
+
             st.download_button(
-                label="📥 CSVでダウンロード（Excel対応）",
+                label="📥 CSVでダウンロード（Excel向けShift_JIS）",
                 data=csv_buffer.getvalue(),
                 file_name=f"userdata_{user_id}_qa.csv",
                 mime="text/csv"

@@ -125,15 +125,27 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity側で読み取れるように JSON を JS に埋め込む
+            # ✅ Unity に自動送信する JS
             st.components.v1.html(f"""
                 <script>
                     window.userData = {json_str};
+
+                    function trySendUserData() {{
+                        if (typeof SendMessage !== 'undefined') {{
+                            SendMessage("JSBridge", "ReceiveUserData", JSON.stringify(window.userData));
+                            console.log("✅ Unity にデータ送信完了");
+                        }} else {{
+                            console.warn("⚠ SendMessage 未定義のため再試行中...");
+                            setTimeout(trySendUserData, 500);
+                        }}
+                    }}
+
+                    trySendUserData();
                 </script>
             """, height=0)
 
             # ✅ Unity教材ページへ
-            unity_url = "https://67e80d6c8102ae49ec3efc12--celadon-pika-e53592.netlify.app/"  # ← ご自身のNetlify URLに差し替えてください
+            unity_url = "https://67e80d6c8102ae49ec3efc12--celadon-pika-e53592.netlify.app/"
             st.markdown("### 続いてUnity教材に進んでください。")
             st.markdown(
                 f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',

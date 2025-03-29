@@ -104,8 +104,6 @@ if user_id and bmr:
             st.success("回答を保存しました。下からダウンロードしてください。")
 
             df = pd.DataFrame([result])
-
-            # ✅ Shift_JIS用 BytesIO に変換（文字化け対策の決定版）
             csv_bytes = io.BytesIO()
             df.to_csv(
                 csv_bytes,
@@ -131,10 +129,28 @@ if user_id and bmr:
                 mime="application/json"
             )
 
+            # ✅ Unityに送るための埋め込み用スクリプト
+            escaped_json = json.dumps(result, ensure_ascii=False).replace('"', '\\"')
+
             unity_url = "https://67e7df3bd1e3641ebd7600c8--thunderous-scone-0059ff.netlify.app/"
             st.markdown("### 続いてUnity教材に進んでください。")
             st.markdown(
                 f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',
+                unsafe_allow_html=True
+            )
+
+            st.markdown(
+                f"""
+                <script>
+                window.onload = function() {{
+                    const jsonData = "{escaped_json}";
+                    console.log("Sending to Unity:", jsonData);
+                    setTimeout(function() {{
+                        SendMessage("JSBridge", "ReceiveUserData", jsonData);
+                    }}, 1000);
+                }};
+                </script>
+                """,
                 unsafe_allow_html=True
             )
 

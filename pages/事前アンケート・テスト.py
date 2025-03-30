@@ -133,7 +133,7 @@ if user_id and bmr:
                 <script>
                     const userData = {json_str};
                     const iframe = document.createElement("iframe");
-                    iframe.src = "https://euphonious-strudel-d33de5.netlify.app/";
+                    iframe.src = "https://magnificent-bubblegum-038119.netlify.app/";
                     iframe.style.width = "100%";
                     iframe.style.height = "800px";
                     iframe.style.border = "none";

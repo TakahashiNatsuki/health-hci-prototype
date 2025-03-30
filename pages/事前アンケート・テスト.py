@@ -135,12 +135,13 @@ if user_id and bmr:
                             SendMessage("JSBridge", "ReceiveUserData", JSON.stringify(window.userData));
                             console.log("✅ Unity にデータ送信完了");
                         }} else {{
-                            console.warn("⚠ SendMessage 未定義のため再試行中...");
                             setTimeout(trySendUserData, 500);
                         }}
                     }}
 
-                    trySendUserData();
+                    window.addEventListener("load", function() {{
+                        setTimeout(trySendUserData, 1000);
+                    }});
                 </script>
             """, height=0)
 

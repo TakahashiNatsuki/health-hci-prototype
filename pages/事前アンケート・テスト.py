@@ -101,6 +101,8 @@ if user_id and bmr:
             st.session_state["saved"] = True
             st.rerun()
 
+# ...（中略）
+
         if st.session_state.get("saved", False):
             result = st.session_state["saved_result"]
             st.success("回答を保存しました。下からダウンロードしてください。")
@@ -125,30 +127,24 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity に iframe で埋め込む（window.userDataを渡す）
+            # ✅ Unity に userData を送信（postMessage 経由で iframe に）
             st.markdown("### Unity教材")
             st.components.v1.html(f"""
                 <script>
-                    window.userData = {json_str};
+                    const userData = {json_str};
+                    const iframe = document.createElement("iframe");
+                    iframe.src = "https://euphonious-strudel-d33de5.netlify.app/";
+                    iframe.style.width = "100%";
+                    iframe.style.height = "800px";
+                    iframe.style.border = "none";
+                    document.body.appendChild(iframe);
 
-                    function trySendUserData() {{
-                        if (typeof SendMessage !== 'undefined') {{
-                            SendMessage("JSBridge", "ReceiveUserData", JSON.stringify(window.userData));
-                            console.log("✅ Unity にデータ送信完了");
-                        }} else {{
-                            console.warn("⏳ Unity の読み込みを待っています...");
-                            setTimeout(trySendUserData, 500);
-                        }}
-                    }}
-
-                    window.addEventListener("message", function (e) {{
-                        if (e.data === "UnityReady") {{
-                            trySendUserData();
+                    // Unity が準備完了になったら userData を送信
+                    window.addEventListener("message", function (event) {{
+                        if (event.data === "UnityReady") {{
+                            console.log("✅ Unity が準備完了");
+                            iframe.contentWindow.postMessage(userData, "*");
                         }}
                     }});
                 </script>
-
-                <iframe src="https://euphonious-strudel-d33de5.netlify.app/" width="100%" height="800px" style="border:none;"></iframe>
             """, height=820)
-else:
-    st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

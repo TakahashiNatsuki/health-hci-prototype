@@ -130,7 +130,7 @@ if user_id and bmr:
                 <script>
                     window.userData = {json_str};
                     setTimeout(() => {{
-                        window.location.href = "https://stellular-ganache-8a1df1.netlify.app/";
+                        window.location.href = "https://luxury-croquembouche-4a816c.netlify.app/";
                     }}, 1000);
                 </script>
             """, height=0)

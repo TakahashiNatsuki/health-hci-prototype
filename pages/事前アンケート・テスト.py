@@ -4,6 +4,7 @@ import datetime
 import json
 import io
 import csv
+import urllib.parse
 
 st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
 st.title("事前アンケート・テスト")
@@ -117,7 +118,7 @@ if user_id and bmr:
                 mime="text/csv"
             )
 
-            json_str = json.dumps(result, ensure_ascii=False, indent=2)
+            json_str = json.dumps(result, ensure_ascii=False)
             st.download_button(
                 label="📥 JSONでダウンロード",
                 data=json_str,
@@ -125,14 +126,14 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity に遷移（window.userData を維持したまま同じタブで）
-            st.components.v1.html(f"""
-                <script>
-                    window.userData = {json_str};
-                    setTimeout(() => {{
-                        window.location.href = "https://luxury-croquembouche-4a816c.netlify.app/";
-                    }}, 1000);
-                </script>
-            """, height=0)
+            # ✅ Unity ページにデータをクエリパラメータで送信
+            encoded_json = urllib.parse.quote(json_str)
+            unity_url = f"https://luxury-croquembouche-4a816c.netlify.app/?data={encoded_json}"
+
+            st.markdown("### Unity教材に進んでください。")
+            st.markdown(
+                f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',
+                unsafe_allow_html=True
+            )
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

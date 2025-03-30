@@ -125,23 +125,14 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity を同ページに埋め込み
-            unity_url = "https://whimsical-axolotl-d66bea.netlify.app/"
-            st.markdown("### Unity教材（ページ内に表示されます）")
+            # ✅ Unity に遷移（window.userData を維持したまま同じタブで）
             st.components.v1.html(f"""
                 <script>
                     window.userData = {json_str};
-                    console.log("✅ userData を登録:", window.userData);
+                    setTimeout(() => {{
+                        window.location.href = "https://YOUR_UNITY_APP_URL.netlify.app/";
+                    }}, 1000);
                 </script>
-
-                <iframe
-                    src="{unity_url}"
-                    width="100%"
-                    height="700"
-                    frameborder="0"
-                    allowfullscreen
-                ></iframe>
-            """, height=720)
-
+            """, height=0)
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

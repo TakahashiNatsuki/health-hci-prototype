@@ -148,7 +148,7 @@ if user_id and bmr:
                     }});
                 </script>
 
-                <iframe src="https://luxury-croquembouche-4a816c.netlify.app/" width="100%" height="800px" style="border:none;"></iframe>
+                <iframe src="https://euphonious-strudel-d33de5.netlify.app/" width="100%" height="800px" style="border:none;"></iframe>
             """, height=820)
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

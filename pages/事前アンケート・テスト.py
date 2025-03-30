@@ -4,7 +4,6 @@ import datetime
 import json
 import io
 import csv
-import urllib.parse
 
 st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
 st.title("事前アンケート・テスト")
@@ -118,7 +117,7 @@ if user_id and bmr:
                 mime="text/csv"
             )
 
-            json_str = json.dumps(result, ensure_ascii=False)
+            json_str = json.dumps(result, ensure_ascii=False, indent=2)
             st.download_button(
                 label="📥 JSONでダウンロード",
                 data=json_str,
@@ -126,14 +125,30 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity ページにデータをクエリパラメータで送信
-            encoded_json = urllib.parse.quote(json_str)
-            unity_url = f"https://luxury-croquembouche-4a816c.netlify.app/?data={encoded_json}"
+            # ✅ Unity に iframe で埋め込む（window.userDataを渡す）
+            st.markdown("### Unity教材")
+            st.components.v1.html(f"""
+                <script>
+                    window.userData = {json_str};
 
-            st.markdown("### Unity教材に進んでください。")
-            st.markdown(
-                f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',
-                unsafe_allow_html=True
-            )
+                    function trySendUserData() {{
+                        if (typeof SendMessage !== 'undefined') {{
+                            SendMessage("JSBridge", "ReceiveUserData", JSON.stringify(window.userData));
+                            console.log("✅ Unity にデータ送信完了");
+                        }} else {{
+                            console.warn("⏳ Unity の読み込みを待っています...");
+                            setTimeout(trySendUserData, 500);
+                        }}
+                    }}
+
+                    window.addEventListener("message", function (e) {{
+                        if (e.data === "UnityReady") {{
+                            trySendUserData();
+                        }}
+                    }});
+                </script>
+
+                <iframe src="https://luxury-croquembouche-4a816c.netlify.app/" width="100%" height="800px" style="border:none;"></iframe>
+            """, height=820)
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

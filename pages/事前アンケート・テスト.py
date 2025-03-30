@@ -101,8 +101,6 @@ if user_id and bmr:
             st.session_state["saved"] = True
             st.rerun()
 
-# ...（中略）
-
         if st.session_state.get("saved", False):
             result = st.session_state["saved_result"]
             st.success("回答を保存しました。下からダウンロードしてください。")
@@ -127,24 +125,25 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity に userData を送信（postMessage 経由で iframe に）
+            # ✅ Unity に userData を postMessage で送信（iframe）
             st.markdown("### Unity教材")
             st.components.v1.html(f"""
+                <iframe id="unity-frame" src="https://magnificent-bubblegum-038119.netlify.app/" width="100%" height="800px" style="border:none;"></iframe>
                 <script>
                     const userData = {json_str};
-                    const iframe = document.createElement("iframe");
-                    iframe.src = "https://magnificent-bubblegum-038119.netlify.app/";
-                    iframe.style.width = "100%";
-                    iframe.style.height = "800px";
-                    iframe.style.border = "none";
-                    document.body.appendChild(iframe);
 
-                    // Unity が準備完了になったら userData を送信
+                    // Unity が Ready と言ってきたら userData を postMessage で送る
                     window.addEventListener("message", function (event) {{
                         if (event.data === "UnityReady") {{
-                            console.log("✅ Unity が準備完了");
-                            iframe.contentWindow.postMessage(userData, "*");
+                            const iframe = document.getElementById("unity-frame");
+                            if (iframe && iframe.contentWindow) {{
+                                iframe.contentWindow.postMessage(userData, "*");
+                                console.log("✅ userData を送信しました");
+                            }}
                         }}
                     }});
                 </script>
             """, height=820)
+
+else:
+    st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

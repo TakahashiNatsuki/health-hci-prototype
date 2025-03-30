@@ -126,7 +126,7 @@ if user_id and bmr:
             )
 
             # ✅ Unity を同ページに埋め込み
-            unity_url = "https://comfy-kleicha-4dfe52.netlify.app/"
+            unity_url = "https://whimsical-axolotl-d66bea.netlify.app/"
             st.markdown("### Unity教材（ページ内に表示されます）")
             st.components.v1.html(f"""
                 <script>

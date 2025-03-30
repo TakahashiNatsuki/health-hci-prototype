@@ -125,33 +125,23 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity に自動送信する JS
+            # ✅ Unity を同ページに埋め込み
+            unity_url = "https://comfy-kleicha-4dfe52.netlify.app/"
+            st.markdown("### Unity教材（ページ内に表示されます）")
             st.components.v1.html(f"""
                 <script>
                     window.userData = {json_str};
-
-                    function trySendUserData() {{
-                        if (typeof SendMessage !== 'undefined') {{
-                            SendMessage("JSBridge", "ReceiveUserData", JSON.stringify(window.userData));
-                            console.log("✅ Unity にデータ送信完了");
-                        }} else {{
-                            setTimeout(trySendUserData, 500);
-                        }}
-                    }}
-
-                    window.addEventListener("load", function() {{
-                        setTimeout(trySendUserData, 1000);
-                    }});
+                    console.log("✅ userData を登録:", window.userData);
                 </script>
-            """, height=0)
 
-            # ✅ Unity教材ページへ
-            unity_url = "https://comfy-kleicha-4dfe52.netlify.app/"
-            st.markdown("### 続いてUnity教材に進んでください。")
-            st.markdown(
-                f'<a href="{unity_url}" target="_blank" style="font-size:18px; color:white; background-color:#4CAF50; padding:10px 20px; border-radius:5px; text-decoration:none;">Unity教材に進む</a>',
-                unsafe_allow_html=True
-            )
+                <iframe
+                    src="{unity_url}"
+                    width="100%"
+                    height="700"
+                    frameborder="0"
+                    allowfullscreen
+                ></iframe>
+            """, height=720)
 
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

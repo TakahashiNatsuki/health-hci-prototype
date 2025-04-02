@@ -129,7 +129,7 @@ if user_id and bmr:
             # ✅ Unity に userData を postMessage で送信（iframe表示部分 修正済み）
             st.markdown("### Unity教材")
             components.html(f"""
-                <iframe id="unity-frame" src="https://aquamarine-pasca-b1e45e.netlify.app/"
+                <iframe id="unity-frame" src="https://thunderous-croquembouche-4f6bf0.netlify.app/"
                         width="1920" height="1080"
                         style="border:none; display:block; margin: 0 auto;">
                 </iframe>

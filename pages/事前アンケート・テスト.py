@@ -128,7 +128,7 @@ if user_id and bmr:
             # ✅ Unity に userData を postMessage で送信（iframe）
             st.markdown("### Unity教材")
             st.components.v1.html(f"""
-                <iframe id="unity-frame" src="https://comfy-tulumba-8d14dc.netlify.app/" width="100%" height="1400px" style="border:none;"></iframe>
+                <iframe id="unity-frame" src="https://brilliant-semolina-f85b78.netlify.app/" width="100%" height="1400px" style="border:none;"></iframe>
                 <script>
                     const userData = {json_str};
 

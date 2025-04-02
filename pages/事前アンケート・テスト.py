@@ -128,7 +128,7 @@ if user_id and bmr:
             # ✅ Unity に userData を postMessage で送信（iframe）
             st.markdown("### Unity教材")
             st.components.v1.html(f"""
-                <iframe id="unity-frame" src="https://guileless-truffle-222ebf.netlify.app/" width="100%" height="800px" style="border:none;"></iframe>
+                <iframe id="unity-frame" src="https://effulgent-begonia-5c9b69.netlify.app/" width="100%" height="1200px" style="border:none;"></iframe>
                 <script>
                     const userData = {json_str};
 
@@ -143,7 +143,7 @@ if user_id and bmr:
                         }}
                     }});
                 </script>
-            """, height=820)
+            """, height=1200)
 
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

@@ -126,18 +126,21 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity 埋め込み＋ postMessage 送信
+            # ✅ Unity 埋め込み＋ postMessage 送信（16:9横長対応）
             st.markdown("### Unity教材")
             components.html(f"""
                 <style>
-                  #unity-frame {{
-                    width: 100vw;
-                    height: 56.25vw;  /* 16:9 = 9 / 16 = 0.5625 */
-                    max-width: 100%;
-                    max-height: 100vh;
-                    display: block;
+                  #unity-wrapper {{
+                    width: 100%;
+                    max-width: 1920px;
+                    aspect-ratio: 16 / 9;
                     margin: 0 auto;
+                  }}
+                  #unity-frame {{
+                    width: 100%;
+                    height: 100%;
                     border: none;
+                    display: block;
                   }}
                   html, body {{
                     margin: 0;
@@ -146,11 +149,13 @@ if user_id and bmr:
                   }}
                 </style>
 
-                <iframe
-                  id="unity-frame"
-                  src="https://cheerful-crumble-30a228.netlify.app/"
-                  allowfullscreen
-                ></iframe>
+                <div id="unity-wrapper">
+                  <iframe
+                    id="unity-frame"
+                    src="https://cheerful-crumble-30a228.netlify.app/"
+                    allowfullscreen
+                  ></iframe>
+                </div>
 
                 <script>
                   const userData = {json_str};
@@ -165,6 +170,7 @@ if user_id and bmr:
                     }}
                   }});
                 </script>
-            """, height=0)  # CSSで高さ固定するので 0 に
+            """, height=1080)
+
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

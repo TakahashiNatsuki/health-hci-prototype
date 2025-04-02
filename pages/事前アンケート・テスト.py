@@ -126,26 +126,45 @@ if user_id and bmr:
                 mime="application/json"
             )
 
+            # ✅ Unity 埋め込み＋ postMessage 送信
             st.markdown("### Unity教材")
             components.html(f"""
-                <iframe id="unity-frame" src="https://cheerful-crumble-30a228.netlify.app/"
-                        width="1920" height="1080"
-                        style="border:none; display:block; margin: 0 auto; padding: 0;">
-                </iframe>
+                <style>
+                  #unity-frame {{
+                    width: 100vw;
+                    height: 56.25vw;  /* 16:9 = 9 / 16 = 0.5625 */
+                    max-width: 100%;
+                    max-height: 100vh;
+                    display: block;
+                    margin: 0 auto;
+                    border: none;
+                  }}
+                  html, body {{
+                    margin: 0;
+                    padding: 0;
+                    overflow-x: hidden;
+                  }}
+                </style>
+
+                <iframe
+                  id="unity-frame"
+                  src="https://merry-frangollo-d29f78.netlify.app/"
+                  allowfullscreen
+                ></iframe>
+
                 <script>
-                    const userData = {json_str};
+                  const userData = {json_str};
 
-                    window.addEventListener("message", function (event) {{
-                        if (event.data === "UnityReady") {{
-                            const iframe = document.getElementById("unity-frame");
-                            if (iframe && iframe.contentWindow) {{
-                                iframe.contentWindow.postMessage(userData, "*");
-                                console.log("✅ userData を送信しました");
-                            }}
-                        }}
-                    }});
+                  window.addEventListener("message", function (event) {{
+                    if (event.data === "UnityReady") {{
+                      const iframe = document.getElementById("unity-frame");
+                      if (iframe && iframe.contentWindow) {{
+                        iframe.contentWindow.postMessage(userData, "*");
+                        console.log("✅ userData を送信しました");
+                      }}
+                    }}
+                  }});
                 </script>
-            """, height=1080)
-
+            """, height=0)  # CSSで高さ固定するので 0 に
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

@@ -4,6 +4,7 @@ import datetime
 import json
 import io
 import csv
+import streamlit.components.v1 as components
 
 st.set_page_config(page_title="事前アンケート・テスト", layout="centered")
 st.title("事前アンケート・テスト")
@@ -125,14 +126,16 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity に userData を postMessage で送信（iframe）
+            # ✅ Unity に userData を postMessage で送信（iframe表示部分 修正済み）
             st.markdown("### Unity教材")
-            st.components.v1.html(f"""
-                <iframe id="unity-frame" src="https://brilliant-semolina-f85b78.netlify.app/" width="100%" height="1400px" style="border:none;"></iframe>
+            components.html(f"""
+                <iframe id="unity-frame" src="https://aquamarine-pasca-b1e45e.netlify.app/"
+                        width="1920" height="1080"
+                        style="border:none; display:block; margin: 0 auto;">
+                </iframe>
                 <script>
                     const userData = {json_str};
 
-                    // Unity が Ready と言ってきたら userData を postMessage で送る
                     window.addEventListener("message", function (event) {{
                         if (event.data === "UnityReady") {{
                             const iframe = document.getElementById("unity-frame");
@@ -143,7 +146,7 @@ if user_id and bmr:
                         }}
                     }});
                 </script>
-            """, height=1400)
+            """, height=1080)
 
 else:
     st.info("IDまたは基礎代謝量が不足しています。前のページからの入力が必要です。")

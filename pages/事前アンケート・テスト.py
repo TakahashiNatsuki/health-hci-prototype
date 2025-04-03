@@ -126,7 +126,6 @@ if user_id and bmr:
                 mime="application/json"
             )
 
-            # ✅ Unity 埋め込み＋ postMessage 送信（16:9横長対応）
             st.markdown("### Unity教材")
             components.html(f"""
                 <style>
@@ -152,23 +151,26 @@ if user_id and bmr:
                 <div id="unity-wrapper">
                   <iframe
                     id="unity-frame"
-                    src="https://incomparable-sprite-8e5f71.netlify.app/"
+                    src="https://lambent-banoffee-05ea47.netlify.app/"
                     allowfullscreen
                   ></iframe>
                 </div>
 
                 <script>
                   const userData = {json_str};
+                  const iframe = document.getElementById("unity-frame");
 
-                  window.addEventListener("message", function (event) {{
-                    if (event.data === "UnityReady") {{
-                      const iframe = document.getElementById("unity-frame");
-                      if (iframe && iframe.contentWindow) {{
-                        iframe.contentWindow.postMessage(userData, "*");
-                        console.log("✅ userData を送信しました");
+                  iframe.onload = function () {{
+                    console.log("📦 iframe 読み込み完了");
+                    window.addEventListener("message", function (event) {{
+                      if (event.data === "UnityReady") {{
+                        if (iframe && iframe.contentWindow) {{
+                          iframe.contentWindow.postMessage(userData, "*");
+                          console.log("✅ userData を送信しました");
+                        }}
                       }}
-                    }}
-                  }});
+                    }});
+                  }};
                 </script>
             """, height=1080)
 
